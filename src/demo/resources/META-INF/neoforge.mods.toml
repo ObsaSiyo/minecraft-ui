@@ -1,0 +1,26 @@
+modLoader="javafml"
+loaderVersion="[4,)"
+license="All Rights Reserved"
+[[mods]]
+modId="frontend_demo"
+version="0.1.0"
+displayName="Minecraft Frontend Fixture"
+description="Isolated fixture screen; not part of the reusable UI library."
+[[dependencies.frontend_demo]]
+modId="neoforge"
+type="required"
+versionRange="[21.1.244]"
+ordering="NONE"
+side="CLIENT"
+[[dependencies.frontend_demo]]
+modId="minecraft"
+type="required"
+versionRange="[1.21.1]"
+ordering="NONE"
+side="CLIENT"
+[[dependencies.frontend_demo]]
+modId="owo"
+type="required"
+versionRange="[0.12.15-beta.10+1.21]"
+ordering="AFTER"
+side="CLIENT"

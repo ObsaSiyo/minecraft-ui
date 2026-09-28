@@ -1,0 +1,50 @@
+plugins {
+    id 'java-library'
+    id 'net.neoforged.moddev' version '2.0.147'
+}
+group = 'local.minecraftfrontend'
+version = '0.1.0'
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(21)
+    withSourcesJar()
+}
+repositories {
+    mavenCentral()
+    exclusiveContent {
+        forRepository { maven { url = 'https://api.modrinth.com/maven' } }
+        filter { includeGroup 'maven.modrinth' }
+    }
+}
+sourceSets {
+    demo {
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output
+    }
+}
+configurations.demoImplementation.extendsFrom(configurations.implementation, configurations.api)
+neoForge {
+    version = '21.1.244'
+    addModdingDependenciesTo sourceSets.demo
+    // API-boundary reflection resolves Minecraft/owo signature types; no client is launched.
+    addModdingDependenciesTo sourceSets.test
+    mods {
+        frontend_demo { sourceSet sourceSets.demo }
+    }
+    runs {
+        demo {
+            client()
+            sourceSet = sourceSets.demo
+            loadedMods = [mods.frontend_demo]
+            gameDirectory = project.file('run/demo')
+        }
+    }
+}
+dependencies {
+    // Immutable Modrinth version ID: NeoForge 0.12.15-beta.10+1.21.
+    api 'maven.modrinth:owo-lib:nQeQz7rx'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.4'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+tasks.named('test') { useJUnitPlatform() }
+tasks.named('check') { dependsOn tasks.named('demoClasses') }
+tasks.withType(JavaCompile).configureEach { options.encoding = 'UTF-8' }
